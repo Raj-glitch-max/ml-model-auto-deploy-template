@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Prediction</title>
+    <script>
+        function sendPrediction() {
+            const data = document.getElementById("inputData").value.split(',').map(Number);
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ data: data })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerHTML = "Prediction: " + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Enter Features for Prediction</h1>
+    <form onsubmit="event.preventDefault(); sendPrediction();">
+        <label for="inputData">Enter 13 features (comma separated):</label><br><br>
+        <input type="text" id="inputData" placeholder="e.g., 5.1, 3.5, 1.4, ..."><br><br>
+        <button type="submit">Predict</button>
+    </form>
+    <p id="result"></p>
+</body>
+</html>
+
